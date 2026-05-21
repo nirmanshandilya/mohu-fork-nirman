@@ -95,9 +95,9 @@ assert_eq!(truncated, 5);
 
 `mohu-dtype` provides native helper functions to translate our internal types into representations used by adjacent ecosystem libraries. This enables **zero-copy interop** (sharing memory directly without copying data back and forth):
 
-| Ecosystem System | Compatibility Standard | Notes |
+| Ecosystem | Compatibility Standard | Notes |
 |---|---|---|
-| **Python `struct`** | Single-character format codes | Codes like `'? '`, `'b'`, `'f'`, `'d'` for Python FFI. |
+| **Python `struct`** | Single-character format codes | Codes like `'?'`, `'b'`, `'f'`, `'d'` for Python FFI. |
 | **Python Buffer Protocol** | PEP 3118 format strings | Endian-prefixed formats (e.g., `"<f"`, `"<Zd"`) for direct memory mapping. |
 | **DLPack Standard** | `DLDataType` structure | Standard format for tensor sharing with PyTorch, JAX, and NumPy. |
 | **Apache Arrow** | `DataType` enum | Zero-copy hands-offs for analytical tools like `Polars` (`feature = "arrow"`). |
