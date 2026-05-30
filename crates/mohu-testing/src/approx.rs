@@ -9,6 +9,13 @@ pub fn assert_allclose_tol(a: &[f32], b: &[f32], rtol: f32, atol: f32) {
     for (x, y) in a.iter().zip(b.iter()) {
         let diff = (x - y).abs();
         let threshold = atol + rtol * y.abs();
-        assert!(diff <= threshold, "Values differ: {} vs {} (diff={}, threshold={})", x, y, diff, threshold);
+        assert!(
+            diff <= threshold,
+            "Values differ: {} vs {} (diff={}, threshold={})",
+            x,
+            y,
+            diff,
+            threshold
+        );
     }
 }
