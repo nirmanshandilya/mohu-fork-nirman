@@ -539,6 +539,21 @@ impl fmt::Display for DType {
     }
 }
 
+// ─── FromStr ─────────────────────────────────────────────────────────────────
+
+impl std::str::FromStr for DType {
+    type Err = MohuError;
+
+    /// Parses a dtype from a NumPy-compatible string.
+    ///
+    /// This delegates to [`DType::parse`] and is the canonical way to convert
+    /// a string into a `DType`. It restores the previously available
+    /// `DType::from_str` API surface via the standard trait.
+    fn from_str(s: &str) -> MohuResult<Self> {
+        Self::parse(s)
+    }
+}
+
 // ─── TryFrom ─────────────────────────────────────────────────────────────────
 
 impl TryFrom<&str> for DType {
