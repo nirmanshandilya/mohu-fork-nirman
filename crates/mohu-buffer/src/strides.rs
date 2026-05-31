@@ -56,9 +56,9 @@ pub fn f_strides(shape: &[usize], itemsize: usize) -> StrideVec {
     let ndim = shape.len();
     let mut strides = StrideVec::with_capacity(ndim);
     let mut acc: isize = itemsize as isize;
-    for &s in shape {
+    for &dim in shape {
         strides.push(acc);
-        acc = acc.saturating_mul(s as isize);
+        acc = acc.saturating_mul(dim as isize);
     }
     strides
 }

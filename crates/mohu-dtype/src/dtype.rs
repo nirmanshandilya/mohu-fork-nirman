@@ -525,6 +525,15 @@ impl DType {
         }
     }
 
+    /// Parses a dtype from a NumPy-compatible string.
+    ///
+    /// This preserves the older inherent constructor while [`std::str::FromStr`]
+    /// is also implemented for idiomatic `"float32".parse::<DType>()` usage.
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_str(s: &str) -> MohuResult<Self> {
+        Self::parse(s)
+    }
+
     /// Returns an iterator over all variants in definition order.
     pub fn all() -> impl Iterator<Item = DType> {
         ALL_DTYPES.iter().copied()
