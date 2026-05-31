@@ -23,9 +23,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: christophebedard/dco-check@0.5.1
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Verify DCO sign-off
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          failed=0
+          for commit in $(git rev-list "$BASE_SHA"..HEAD); do
+            if ! git log -1 --format=%B "$commit" | grep -Eiq '^Signed-off-by: .+ <.+@.+>$'; then
+              echo "::error::commit $commit is missing a Signed-off-by line"
+              failed=1
+            fi
+          done
+          exit "$failed"
 
   # ── Gate: Formatting ────────────────────────────────────────────────────────
   fmt:
@@ -138,10 +152,11 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: semver
+      - run: git fetch --no-tags origin ${{ github.event.pull_request.base.sha }}
       - uses: obi1kenobi/cargo-semver-checks-action@v2
         with:
           feature-group: all-features
-          baseline-rev: origin/main
+          baseline-rev: ${{ github.event.pull_request.base.sha }}
 
   # ── Cross-compilation (push to main only — too expensive per PR) ─────────────
   cross:
